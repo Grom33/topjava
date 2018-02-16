@@ -18,17 +18,13 @@ public class UserMealWithExceed {
 
     private final int calories;
 
-    private Map<LocalDate, Boolean> dayExceed;
+    private final boolean exceed;
 
-    public UserMealWithExceed(LocalDateTime dateTime, String description, int calories, Map<LocalDate, Boolean> de) {
+    public UserMealWithExceed(LocalDateTime dateTime, String description, int calories, boolean exceed) {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
-        this.dayExceed = de;
-    }
-
-    public UserMealWithExceed(LocalDateTime dateTime, String description, int calories) {
-        this(dateTime, description, calories, null);
+        this.exceed = exceed;
     }
 
     public LocalDateTime getDateTime() {
@@ -44,11 +40,7 @@ public class UserMealWithExceed {
     }
 
     public boolean isExceed() {
-        if (!(dayExceed == null)) {
-            return dayExceed.get(UserMealsUtil.toLocalDate(dateTime));
-        } else {
-            return false;
-        }
+        return exceed;
     }
 
     @Override

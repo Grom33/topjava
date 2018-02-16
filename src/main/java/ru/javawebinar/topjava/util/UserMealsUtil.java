@@ -18,42 +18,18 @@ import java.util.stream.Stream;
  * 31.05.2015.
  */
 public class UserMealsUtil {
-    public static void main(String[] args) {
-        List<UserMeal> mealList = Arrays.asList(
-                new UserMeal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
-                new UserMeal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
-                new UserMeal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
-                new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-                new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
-                new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
-        );
-    }
-
     public static List<UserMealWithExceed> getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        Map<LocalDate, Integer> dayExceedValue = new HashMap<>();
-        Map<LocalDate, Boolean> dayExceed = new HashMap<>();
+        Map<LocalDate, Integer> dayExceedValue = mealList.stream()
+                .collect(Collectors.groupingBy((UserMeal::getDate), Collectors.summingInt(UserMeal::getCalories)));
 
-        Stream<UserMeal> streamUserMeal = mealList.stream();
-
-        List<UserMealWithExceed> streamUserMeal1WithExceed = streamUserMeal
-                .peek((userMeal -> {
-                    if (dayExceedValue.containsKey(toLocalDate(userMeal.getDateTime()))) {
-                        dayExceedValue.put(toLocalDate(userMeal.getDateTime()), (userMeal.getCalories() + dayExceedValue.get(toLocalDate(userMeal.getDateTime()))));
-                    } else {
-                        dayExceedValue.put(toLocalDate(userMeal.getDateTime()), userMeal.getCalories());
-                    }
-                }))
+        return mealList.stream()
                 .filter((um) -> TimeUtil.isBetween(TimeUtil.toLocaTime(um.getDateTime()), startTime, endTime))
-                .map((userMeal -> new UserMealWithExceed(userMeal.getDateTime(), userMeal.getDescription(), userMeal.getCalories(), dayExceed)))
+                .map((userMeal ->
+                        new UserMealWithExceed(
+                                userMeal.getDateTime()
+                                , userMeal.getDescription()
+                                , userMeal.getCalories()
+                                , (dayExceedValue.get(userMeal.getDate()) > caloriesPerDay))))
                 .collect(Collectors.toList());
-
-        dayExceedValue.forEach((ldt, cal) -> dayExceed.put(ldt, (cal > caloriesPerDay)));
-
-        return streamUserMeal1WithExceed;
     }
-
-    public static LocalDate toLocalDate(LocalDateTime ldt) {
-        return LocalDate.of(ldt.getYear(), ldt.getMonth(), ldt.getDayOfMonth());
-    }
-
 }
