@@ -32,4 +32,22 @@ public class UserMealsUtil {
                                 , (dayExceedValue.get(userMeal.getDate()) > caloriesPerDay))))
                 .collect(Collectors.toList());
     }
+
+    public static List<UserMealWithExceed> getFilteredWithExceededCycle(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        Map<LocalDate, Integer> dayExceedValue = new HashMap<>();
+
+        mealList.forEach((userMeal) -> dayExceedValue.put(userMeal.getDate(),
+                (dayExceedValue.getOrDefault(userMeal.getDate(), 0) + userMeal.getCalories())));
+
+        List<UserMealWithExceed> result = new ArrayList<>();
+        mealList.forEach((userMeal) -> {
+            if (TimeUtil.isBetween(userMeal.getDateTime().toLocalTime(), startTime, endTime)) {
+                result.add(new UserMealWithExceed(userMeal.getDateTime(),
+                        userMeal.getDescription(),
+                        userMeal.getCalories(),
+                        (dayExceedValue.get(userMeal.getDate()) > caloriesPerDay)));
+            }
+        });
+        return result;
+    }
 }
