@@ -56,14 +56,12 @@ public class MealRestController {
         service.update(AuthorizedUser.id(), meal);
     }
 
-    public List<MealWithExceed> getFiltered(LocalDate begDate, LocalDate endDate, LocalTime begTime, LocalTime endTime) {
-        log.info("getByFilter {} {} {} {}", begDate, endDate, begTime, endTime);
+    public List<MealWithExceed> getAll(LocalTime beginTime, LocalTime endTime) {
+        log.info("getAll {} {}", beginTime, endTime);
 
-        begDate = begDate == null ? LocalDate.MIN : begDate;
-        endDate = endDate == null ? LocalDate.MAX : endDate;
-        begTime = begTime == null ? LocalTime.MIN : begTime;
+        beginTime = beginTime == null ? LocalTime.MIN : beginTime;
         endTime = endTime == null ? LocalTime.MAX : endTime;
 
-        return MealsUtil.getFilteredWithExceeded(service.getFilteredByDate(AuthorizedUser.id(), begDate, endDate), AuthorizedUser.getCaloriesPerDay(), begTime, endTime);
+        return MealsUtil.getFilteredWithExceeded(service.getAll(AuthorizedUser.id()), AuthorizedUser.getCaloriesPerDay(), beginTime, endTime);
     }
 }
