@@ -18,8 +18,30 @@
 </head>
 <body>
 <section>
-    <h3><a href="index.html">Home</a></h3>
+    <h3><a href="index.jsp">Home</a></h3>
     <h2>Meals</h2>
+    <form method="get" action="meals">
+        <table>
+            <tr>
+                <td>Start date:</td>
+                <td><input type="date" value="${beginDate}" name="beginDate"></td>
+                <td>Start time:</td>
+                <td><input type="time" value="${beginTime}" name="beginTime"></td>
+            </tr>
+            <tr>
+                <td>End date:</td>
+                <td><input type="date" value="${endDate}" name="endDate"></td>
+                <td>End time:</td>
+                <td><input type="time" value="${endTime}" name="endTime"></td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <button type="submit">Apply</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
     <a href="meals?action=create">Add Meal</a>
     <hr/>
     <table border="1" cellpadding="8" cellspacing="0">

@@ -17,20 +17,26 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 public class MealsUtil {
-    public static final List<Meal> MEALS = Arrays.asList(
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), 1, "Завтрак", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), 1, "Обед", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), 1, "Ужин", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), 1, "Завтрак", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), 1, "Обед", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), 1, "Ужин", 510),
+    public static final List<Meal> MEALS01 = Arrays.asList(
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0),"Завтрак", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0),"Обед", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0),"Ужин", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0),"Завтрак", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0),"Обед", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0),"Ужин", 510)
+    );
 
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), 2, "Завтрак", 700),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), 2, "Обед", 2000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), 2, "Ужин", 1200),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), 2, "Завтрак", 3000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), 2, "Обед", 1500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), 2, "Ужин", 2510)
+    public static final List<Meal> MEALS02 = Arrays.asList(
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0),"Завтрак", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0),"Обед", 1600),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0),"Ужин", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0),"Завтрак", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0),"Обед", 560)
+    );
+    public static final List<Meal> MEALS03 = Arrays.asList(
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0),"Завтрак", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0),"Завтрак", 1030),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0),"Обед", 560)
     );
 
     public static final int DEFAULT_CALORIES_PER_DAY = 2000;

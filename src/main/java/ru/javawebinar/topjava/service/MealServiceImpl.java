@@ -39,7 +39,7 @@ public class MealServiceImpl implements MealService {
     @Override
     public void update(int userId, Meal meal) {
         checkNotFoundWithId(repository.save(userId, meal), meal.getId());
-    }
+}
 
     @Override
     public Collection<Meal> getAll(int userId) {
@@ -47,7 +47,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Collection<Meal> getFilteredByDate(int userId, LocalDate begDate, LocalDate endDate) {
-        return repository.getFilteredByDate(userId, begDate, endDate);
+    public Collection<Meal> getFiltered(int userId, LocalDate begin, LocalDate end) {
+        return repository.getFiltered(userId, begin, end);
     }
 }

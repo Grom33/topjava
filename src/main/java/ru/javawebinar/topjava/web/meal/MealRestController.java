@@ -31,7 +31,9 @@ public class MealRestController {
 
     public Collection<MealWithExceed> getAll() {
         log.info("getAll");
-        return MealsUtil.getWithExceeded(service.getAll(AuthorizedUser.id()), AuthorizedUser.getCaloriesPerDay());
+        return MealsUtil.getWithExceeded(
+                service.getAll(AuthorizedUser.id()),
+                AuthorizedUser.getCaloriesPerDay());
     }
 
     public Meal get(int id) {
@@ -62,6 +64,26 @@ public class MealRestController {
         beginTime = beginTime == null ? LocalTime.MIN : beginTime;
         endTime = endTime == null ? LocalTime.MAX : endTime;
 
-        return MealsUtil.getFilteredWithExceeded(service.getAll(AuthorizedUser.id()), AuthorizedUser.getCaloriesPerDay(), beginTime, endTime);
+        return MealsUtil.getFilteredWithExceeded(
+                service.getAll(AuthorizedUser.id()),
+                AuthorizedUser.getCaloriesPerDay(),
+                beginTime,
+                endTime);
     }
+
+    public List<MealWithExceed> getFiltered(LocalTime beginTime, LocalTime endTime, LocalDate beginDate, LocalDate endDate) {
+        log.info("getAll {} {} {} {}", beginTime, endTime, beginDate, endDate);
+
+        beginTime = beginTime == null ? LocalTime.MIN : beginTime;
+        endTime = endTime == null ? LocalTime.MAX : endTime;
+        beginDate = beginDate == null ? LocalDate.MIN : beginDate;
+        endDate = endDate == null ? LocalDate.MAX : endDate;
+
+        return MealsUtil.getFilteredWithExceeded(
+                service.getFiltered(AuthorizedUser.id(), beginDate, endDate),
+                AuthorizedUser.getCaloriesPerDay(),
+                beginTime,
+                endTime);
+    }
+
 }
