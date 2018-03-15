@@ -31,8 +31,10 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             repository.put(meal.getId(), meal);
             return meal;
         } else {
-            if (meal.getUserId() != userID) return null;
+            Meal trueMeal = repository.getOrDefault(meal.getId(), null);
+            if ((trueMeal == null) || (trueMeal.getUserId() != userID)) return null;
         }
+        meal.setUserId(userID);
         // treat case: update, but absent in storage
         return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
@@ -51,11 +53,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public Meal get(int userID, int id) {
         Meal meal = repository.get(id);
-        if (meal != null) {
-            return (meal.getUserId() == userID) ? meal : null;
-        } else {
-            return null;
-        }
+        return ((meal != null) && (meal.getUserId() == userID)) ? meal : null;
     }
 
     @Override
@@ -63,16 +61,15 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         List<Meal> meals = new ArrayList<>(repository.values());
         return meals.stream()
                 .filter(meal -> meal.getUserId() == userID)
+                .sorted(Comparator.comparing(Meal::getDateTime))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Collection<Meal> getFiltered(int userID, LocalDate begin, LocalDate end) {
         List<Meal> meals = new ArrayList<>(repository.values());
-        return meals.stream()
-                .filter(meal -> meal.getUserId() == userID)
+        return this.getAll(userID).stream()
                 .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), begin, end))
-                .sorted(Comparator.comparing(Meal::getDateTime))
                 .collect(Collectors.toList());
     }
 }
