@@ -47,7 +47,7 @@ public class MealServiceTest {
 
     @Test
     public void delete() {
-        service.delete(100002, USER_ID);
+        service.delete(MEAL_ID, USER_ID);
         List<Meal> meals = service.getAll(USER_ID);
         assertNotContain(meals, MEAL01);
     }
@@ -78,13 +78,13 @@ public class MealServiceTest {
 
     @Test
     public void update() {
-        Meal firstMeal = new Meal(100003, LocalDateTime.of(2015, 5, 30, 9, 30, 25), "Обед", 1500);
+        Meal firstMeal = new Meal(MEAL02_ID, LocalDateTime.of(2015, 5, 30, 9, 30, 25), "Обед", 1500);
 
         firstMeal.setDescription("UPDATE");
         firstMeal.setCalories(1000);
         service.update(firstMeal, USER_ID);
 
-        Meal firstMealFromDB = service.get(100003, USER_ID);
+        Meal firstMealFromDB = service.get(MEAL02_ID, USER_ID);
         assertMatch(firstMealFromDB, MEAL_UPDATED);
     }
 
@@ -100,7 +100,7 @@ public class MealServiceTest {
     public void updateForeignMeal() {
         service.update(MEAL07, USER_ID);
 
-        Meal firstMealFromDB = service.get(100003, USER_ID);
+        Meal firstMealFromDB = service.get(MEAL02_ID, USER_ID);
         assertMatch(firstMealFromDB, MEAL_UPDATED);
     }
 

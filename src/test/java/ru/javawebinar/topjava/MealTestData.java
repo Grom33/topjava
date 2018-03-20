@@ -14,6 +14,7 @@ import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
     public static final int MEAL_ID = 100002;
+    public static final int MEAL02_ID = 100002;
 
     public static final Meal MEAL01 = new Meal(100002, LocalDateTime.of(2015, 5, 30, 9, 30, 25), "Завтрак", 800);
     public static final Meal MEAL02 = new Meal(100003, LocalDateTime.of(2015, 5, 30, 13, 30, 25), "Обед", 1500);
@@ -49,6 +50,6 @@ public class MealTestData {
     }
 
     public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
-        assertThat(actual).usingElementComparatorIgnoringFields().isEqualTo(expected);
+        assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(expected);
     }
 }
