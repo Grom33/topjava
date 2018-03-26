@@ -1,7 +1,14 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -11,9 +18,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
@@ -25,6 +37,8 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
+    private static final Logger log = getLogger(MealServiceTest.class);
+    private static final Map<String, Long> TEST_TIME_RESULT = new LinkedHashMap<>();
 
     static {
         SLF4JBridgeHandler.install();
@@ -32,6 +46,29 @@ public class MealServiceTest {
 
     @Autowired
     private MealService service;
+
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void finished(long nanos, Description description) {
+            TEST_TIME_RESULT.put(description.getMethodName(), nanos);
+        }
+    };
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
+    @BeforeClass
+    public static void beforeClass() {
+        TEST_TIME_RESULT.clear();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        TEST_TIME_RESULT.forEach((test, time) ->
+                log.info(String.format(("%s - test '%s' elapsed time %s ms"), "MealService", test, TimeUnit.NANOSECONDS.toMillis(time))));
+    }
+
 
     @Test
     public void delete() throws Exception {
@@ -42,6 +79,7 @@ public class MealServiceTest {
     @Test(expected = NotFoundException.class)
     public void deleteNotFound() throws Exception {
         service.delete(MEAL1_ID, 1);
+
     }
 
     @Test
@@ -57,8 +95,9 @@ public class MealServiceTest {
         assertMatch(actual, ADMIN_MEAL1);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotFound() throws Exception {
+        exception.expect(NotFoundException.class);
         service.get(MEAL1_ID, ADMIN_ID);
     }
 
@@ -69,8 +108,9 @@ public class MealServiceTest {
         assertMatch(service.get(MEAL1_ID, USER_ID), updated);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void updateNotFound() throws Exception {
+        exception.expect(NotFoundException.class);
         service.update(MEAL1, ADMIN_ID);
     }
 
