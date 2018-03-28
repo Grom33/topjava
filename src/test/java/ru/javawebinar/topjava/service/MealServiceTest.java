@@ -18,7 +18,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.LinkedHashMap;
@@ -39,6 +38,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public class MealServiceTest {
     private static final Logger log = getLogger(MealServiceTest.class);
     private static final Map<String, Long> TEST_TIME_RESULT = new LinkedHashMap<>();
+    //private static Long totalTime = 0L;
 
     static {
         SLF4JBridgeHandler.install();
@@ -65,8 +65,13 @@ public class MealServiceTest {
 
     @AfterClass
     public static void afterClass() {
-        TEST_TIME_RESULT.forEach((test, time) ->
-                log.info(String.format(("%s - test '%s' elapsed time %s ms"), "MealService", test, TimeUnit.NANOSECONDS.toMillis(time))));
+        final Long[] totalTime = {0L};
+        TEST_TIME_RESULT.forEach((test, time) -> {
+                    log.info(String.format(("%s - test '%s' elapsed time %s ms"), "MealService", test, TimeUnit.NANOSECONDS.toMillis(time)));
+                    totalTime[0] += time;
+                }
+        );
+        log.info(String.format(("All test '%s' elapsed time %s ms"), "MealService", TimeUnit.NANOSECONDS.toMillis(totalTime[0])));
     }
 
 
